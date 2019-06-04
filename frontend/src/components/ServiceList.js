@@ -3,13 +3,6 @@ import { Col, ListGroup, ListGroupItem, Badge, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import apiClient from '../apiClient';
 
-const validIntervalUnits = new Map();
-validIntervalUnits.set('H', 'Hours');
-validIntervalUnits.set('D', 'Days');
-validIntervalUnits.set('W', 'Weeks');
-validIntervalUnits.set('M', 'Months');
-validIntervalUnits.set('Y', 'Years');
-
 export default class ServiceList extends Component {
 	constructor(props) {
 		super(props);
@@ -28,6 +21,9 @@ export default class ServiceList extends Component {
 	}
 
 	renderServiceEntry(service) {
+		// Healthy == true means the service has checked in recently, or isn't over the miss threshold yet
+		// Healthy == false means the service has missed enough checkins to go over the threshold
+		// Healthy == null | undefined means the service has never checked in yet
 		return (
 			<ListGroupItem key={service.ServiceId}>
 				<Link to={`/service/${service.ServiceId}/edit`}>{service.name}</Link>

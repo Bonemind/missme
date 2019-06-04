@@ -2,13 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Input, FormGroup, Col, Label, Button, Row, Card, CardTitle, CardText } from 'reactstrap';
 import confirmDialog from 'reactstrap-confirm';
 import apiClient from '../apiClient';
-
-const validIntervalUnits = new Map();
-validIntervalUnits.set('H', 'Hours');
-validIntervalUnits.set('D', 'Days');
-validIntervalUnits.set('W', 'Weeks');
-validIntervalUnits.set('M', 'Months');
-validIntervalUnits.set('Y', 'Years');
+import { validIntervalUnits } from '../constants';
 
 class PropertyDisplay extends Component {
 	constructor(props) {
