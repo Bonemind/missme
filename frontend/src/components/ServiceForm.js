@@ -26,17 +26,19 @@ class PropertyDisplay extends Component {
 		return (
 			<Fragment>
 				<FormGroup>
-					<Label for="serviceId">ServiceId</Label>
+					<Label for="serviceId">ID</Label>
 					<Input type="text" disabled name="serviceId" id="serviceId" value={service.ServiceId} />
 				</FormGroup>
 				<FormGroup>
-					<Label for="ApiKey">ApiKey</Label>
+					<Label for="ApiKey">Api Key</Label>
 					<Input type="text" disabled name="ApiKey" id="ApiKey" value={service.ApiKey} />
 				</FormGroup>
 				<Card body>
 					<CardTitle>CURL example</CardTitle>
 					<CardText>
-						curl -H "x-api-key: {service.ApiKey}" {this.state.basePath}/notify/{service.ServiceId}
+						<pre>
+							curl -H "x-api-key: {service.ApiKey}" {this.state.basePath}/notify/{service.ServiceId}
+						</pre>
 					</CardText>
 				</Card>
 				<br />
@@ -179,6 +181,10 @@ export default class ServiceForm extends Component {
 		const { history } = this.props;
 		return (
 			<Col md={12}>
+				<h2>
+					{this.state.ServiceId
+						? `Service: ${this.state.name}` : 'Create Service'}
+				</h2>
 				{this.state.ServiceId && <PropertyDisplay service={this.state} />}
 				<FormGroup>
 					<Label for="name">Name</Label>

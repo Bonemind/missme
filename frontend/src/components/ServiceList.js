@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { Col, ListGroup, ListGroupItem, Badge, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import apiClient from '../apiClient';
 
@@ -31,6 +31,12 @@ export default class ServiceList extends Component {
 		return (
 			<ListGroupItem key={service.ServiceId}>
 				<Link to={`/service/${service.ServiceId}/edit`}>{service.name}</Link>
+				{ service.isHealthy === true &&
+						<Badge className="float-right" color="success">Ok</Badge> }
+				{ service.isHealthy === false &&
+						<Badge className="float-right" color="danger">Dead</Badge> }
+				{ service.isHealthy == null &&
+						<Badge className="float-right" color="secondary">Unknown</Badge> }
 			</ListGroupItem>
 		);
 	}
@@ -39,11 +45,14 @@ export default class ServiceList extends Component {
 		if (this.state.services == null) {
 			return (<b>Loading</b>);
 		}
+		const { history } = this.props;
 		return (
 			<Col md={12}>
-				<ListGroup>
+				<h2>Services</h2>
+				<ListGroup flush>
 					{ this.state.services.map(this.renderServiceEntry) }
 				</ListGroup>
+				<Button type="submit" onClick={() => history.push('/service/create')}>Add service</Button>
 			</Col>
 		);
 	}
