@@ -1,0 +1,3 @@
+ses_region: '<REGION>'
+ses_from_email: '<FROM_EMAIL>'
+ses_arn: '<SES ARN>'

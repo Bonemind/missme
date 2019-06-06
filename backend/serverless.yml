@@ -20,12 +20,14 @@ plugins:
 
 custom:
   services_table: ${ssm:/${self:service.name}/${self:provider.stage}/service_table_name}
+  ses_region: ${file(./ses_config.yml):ses_region}
+  ses_from_email: ${file(./ses_config.yml):ses_from_email}
+  ses_arn: ${file(./ses_config.yml):ses_arn}
   amplify:
     - filename: ../frontend/src/aws-exports.js
       type: javascript
       appClient: WebUserPoolClient
       s3bucket: disabled
-
 
 package:
   individually: true
@@ -44,6 +46,11 @@ provider:
       - dynamodb:UpdateItem
       - dynamodb:DeleteItem
     Resource: "arn:aws:dynamodb:${self:provider.region}:#{AWS::AccountId}:table/${self:custom.services_table}"
+  - Effect: 'Allow'
+    Action:
+      - "ses:SendEmail"
+      - "ses:SendRawEmail"
+    Resource: ${self:custom.ses_arn}
 
 
 functions:
@@ -149,6 +156,19 @@ functions:
           parameters:
             paths:
               serviceId: true
+
+  # TODO: should be scheduled hourly
+  # for now keep on demand
+  monitor:
+    handler: monitor/monitor.handler
+    environment:
+      SERVICES_TABLE: ${self:custom.services_table}
+      SES_REGION: ${self:custom.ses_region}
+      SES_FROM_EMAIL: ${self:custom.ses_from_email}
+    events:
+     - http:
+        path: /monitor
+        method: get
 
 
 resources:
