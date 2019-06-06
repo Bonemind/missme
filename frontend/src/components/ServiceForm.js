@@ -214,10 +214,10 @@ export default class ServiceForm extends Component {
 						value={this.state.threshold}
 					/>
 				</FormGroup>
-				<Button type="submit" onClick={() => history.push('/')}>Back</Button>
+				<Button type="submit" onClick={() => history.push('/')}>Back</Button>&nbsp;
 				{ this.state.ServiceId && 
 					<Button type="submit" color="danger" onClick={() => this.delete()}>Delete</Button>
-				}
+				}&nbsp;
 				<Button type="submit" color="primary" onClick={() => this.save()}>Save</Button>
 			</Col>
 		);
