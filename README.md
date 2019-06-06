@@ -17,10 +17,10 @@ Missme is built to be deployed serverlessly on the AWS platform.
 
 Requirements:
 
-	- [Severless](https://serverless.com/)
-	- [Amplify](https://aws-amplify.github.io/)
-	- [Terraform](https://www.terraform.io/)
-	- [AWS Cli](https://aws.amazon.com/cli/)
+- [Severless](https://serverless.com/)
+- [Amplify](https://aws-amplify.github.io/)
+- [Terraform](https://www.terraform.io/)
+- [AWS Cli](https://aws.amazon.com/cli/)
 
 Once you have the prerequisite tooling installed, configure your AWS credentials using the AWS cli.
 The next step is to run Terraform which will provision the required db tables.
@@ -45,8 +45,8 @@ After you've created a service you can click on it to see your api key, id, and 
 
 The service overview gives a list of statusses per service, which mean the following:
 
-	- Ok: The service has checked in at least once, and hasn't been missing long enough to go over its threshold.
-	- Dead: The service has checked in at least once, and has missed enough check ins to go over its threshold.
-	- Unknown: The service has been configured, but has never checked in.
+- Ok: The service has checked in at least once, and hasn't been missing long enough to go over its threshold.
+- Dead: The service has checked in at least once, and has missed enough check ins to go over its threshold.
+- Unknown: The service has been configured, but has never checked in.
 
 
