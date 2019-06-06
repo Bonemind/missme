@@ -39,14 +39,14 @@ will build and upload the frontend to AWS and display a link where it can be fou
 
 Create an account or login to your frontend, click `Add service` to create a service, and configure it as you see fit.
 The interval is how often you expect a service to check in (e.g. "hours 4" will expect to see the service every 4 hours).
-The threshold is how many times in a row a service is allowed to miss a check in (e.g. a "days 1" service with a threshold of 3 will only notify you if there haven't been any check ins for 4 days). You will only be notified once if a service goes missing, after which missme stays silent until the service checks back in at least once. This means missed checkins since you've been notified won't trigger more emails till the service shows back up. Assumption is that you've seen the email and are working on fixing the service when you have time.
+The threshold is how many times in a row a service is allowed to miss a check in (e.g. a "days 1" service with a threshold of 3 will only notify you if there haven't been any check ins for 4 days). You will only be notified once if a service goes missing, after which missme stays silent until the service checks back in at least once. This means missed check ins since you've been notified won't trigger more emails till the service shows back up. Assumption is that you've seen the email and are working on fixing the service when you have time.
 
 After you've created a service you can click on it to see your api key, id, and a curl example of you to check in. A check in is always a GET request with no body and the api key as a header. If all goes well, you get a `204` status code back.
 
 The service overview gives a list of statusses per service, which mean the following:
 
-- Ok: The service has checked in at least once, and hasn't been missing long enough to go over its threshold.
-- Dead: The service has checked in at least once, and has missed enough check ins to go over its threshold.
-- Unknown: The service has been configured, but has never checked in.
+	- Ok: The service has checked in at least once, and hasn't been missing long enough to go over its threshold.
+	- Dead: The service has checked in at least once, and has missed enough check ins to go over its threshold.
+	- Unknown: The service has been configured, but has never checked in.
 
 
