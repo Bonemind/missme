@@ -19,7 +19,6 @@ module.exports.handler = async (event) => {
 	if (existingService.UserId !== email) {
 		return responses.Forbidden().getResponse();
 	}
-	
 
 	const deleteParams = {
 		TableName: process.env.SERVICES_TABLE,

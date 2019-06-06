@@ -19,8 +19,8 @@ module.exports.handler = async (event) => {
 	if (existingService.UserId !== email) {
 		return responses.Forbidden().getResponse();
 	}
-	
 
+	// Validate input
 	let validated = {};
 	try {
 		validated = validator.validateInput(event.body, true);
@@ -32,6 +32,7 @@ module.exports.handler = async (event) => {
 		return responses.BadRequest(validated).getResponse();
 	}
 
+	// Update merge new data with existing data
 	const updated = {...existingService, ...validated};
 
 	const updateParams = {

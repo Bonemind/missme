@@ -12,6 +12,7 @@ function isEmptyObject(obj) {
 
 function validateInput(input, checkRequired = false) {
 	let validated;
+
 	// Basic validations
 	try {
 		const parsed = JSON.parse(input);
@@ -28,11 +29,13 @@ function validateInput(input, checkRequired = false) {
 		return { input: input, errors: 'Could not validate body' };
 	}
 
+	// Check required fields if enabled
 	const missingFields = requiredFields.filter(rf => !validated[rf]);
 	if (checkRequired && missingFields.length != 0) {
 		return { input: validated, errors: `The fields: ${missingFields.join(', ')} are required` }
 	}
 
+	// Build a list of validation errors
 	const errors = {};
 
 	if (validated.name && validated.name.length < 3) {
@@ -45,6 +48,7 @@ function validateInput(input, checkRequired = false) {
 		errors['threshold'] = 'Should be a positive number';
 	}
 
+	// Validate the interval object if it exists
 	if (validated.interval) {
 		const interval = { unit: validated.interval.unit, count: validated.interval.count };
 		if (!interval.count || isNaN(interval.count) || interval.count <= 0) {

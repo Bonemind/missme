@@ -10,6 +10,7 @@ module.exports.handler = async (event) => {
 	const claims = event.requestContext.authorizer.claims;
 	const email = claims.email.toLowerCase();
 
+	// Validate
 	let validated = {};
 	try {
 		validated = validator.validateInput(event.body, true);
@@ -21,6 +22,7 @@ module.exports.handler = async (event) => {
 		return responses.BadRequest(validated).getResponse();
 	}
 
+	// Create a new service entry
 	const newService = {
 		ServiceId: utils.generateId(),
 		UserId: email,

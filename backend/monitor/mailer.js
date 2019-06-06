@@ -1,5 +1,4 @@
-// Load the AWS SDK for Node.js
-var AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
 
 // TODO: Make it possible to send service restored emails
 function sendServiceEmail(service) {
@@ -27,8 +26,8 @@ function sendServiceEmail(service) {
 			}
 		},
 	};
-	const sendPromise = new AWS.SES({apiVersion: '2010-12-01', region: process.env.SES_REGION}).sendEmail(params).promise();
-	return sendPromise;
+
+	return new AWS.SES({apiVersion: '2010-12-01', region: process.env.SES_REGION}).sendEmail(params).promise();
 };
 
 module.exports = {

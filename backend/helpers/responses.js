@@ -1,3 +1,4 @@
+// Lambda API-Gateway response wrappers
 class BaseError {
 	constructor(message, statusCode) {
 		this.message = message;
@@ -7,7 +8,7 @@ class BaseError {
 	getResponse() {
 		return {
 			headers: {
-				"Access-Control-Allow-Origin" : "*" // Required for CORS support to work
+				"Access-Control-Allow-Origin" : "*"
 			},
 			body: JSON.stringify({ message: this.message }),
 			statusCode: this.statusCode

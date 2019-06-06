@@ -16,7 +16,7 @@ function generateApiKey() {
 	return uuidv4();
 }
 
-// Fetches a user's document from the database and tablename
+// Fetches a service document from the database and tablename
 async function getServiceById(db, TableName, serviceId) {
 	const params = {
 		TableName: TableName,

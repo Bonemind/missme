@@ -1,6 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
+
 const responses = require('../helpers/responses');
 const utils = require('../helpers/utils');
 
@@ -21,6 +22,9 @@ module.exports.handler = async (event) => {
 		return responses.Forbidden().getResponse();
 	}
 
+	// Add an entry to the list of checkins, prepending it
+	// This makes sure the checkin list is sorted by desc
+	// We also only store the last 25 checkins, we're not really interested in the rest
 	const date = new Date().toISOString();
 
 	if (!existingService.checkins) {

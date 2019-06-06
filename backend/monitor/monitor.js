@@ -1,14 +1,13 @@
 'use strict';
+const AWS = require('aws-sdk');
+
 const dateUtils = require('./dateUtils');
 const mailer = require('./mailer');
-
-const AWS = require('aws-sdk');
 const responses = require('../helpers/responses');
 
 const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 
 module.exports.handler = async (event) => {
-
 	const params = {
 		TableName: process.env.SERVICES_TABLE
 	};
@@ -20,6 +19,8 @@ module.exports.handler = async (event) => {
 		return;
 	}
 
+	// List of services that have transitioned to unhealthy this invocation
+	// These are also the services a notification will be sent out for
 	const newUnhealthy = [];
 
 	serviceResults.Items.forEach(s => {
@@ -42,9 +43,11 @@ module.exports.handler = async (event) => {
 		}
 	});
 
+	// Send emails
 	const mailPromises = newUnhealthy.map(mailer.sendServiceEmail);
 	await Promise.all(mailPromises);
 
+	// Update services
 	const updates = newUnhealthy.map(s => {
 		const itemUpdate = {
 			TableName: process.env.SERVICES_TABLE,
