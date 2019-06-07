@@ -1,22 +1,11 @@
-# Welcome to Serverless!
-#
-# This file is the main config file for your service.
-# It's very minimal at this point and uses default values.
-# You can always add more config options for more control.
-# We've included some commented out config examples here.
-# Just uncomment any of them to get that config option.
-#
-# For full config options, check the docs:
-#    docs.serverless.com
-#
-# Happy Coding!
+service: missme
 
-service: missme # NOTE: update this with your service name
 
 plugins:
   - aws-amplify-serverless-plugin
   - serverless-pseudo-parameters
   - serverless-plugin-optimize
+
 
 custom:
   ses_region: ${file(./ses_config.yml):ses_region}
@@ -28,8 +17,10 @@ custom:
       appClient: WebUserPoolClient
       s3bucket: disabled
 
+
 package:
   individually: true
+
 
 provider:
   name: aws
@@ -90,7 +81,6 @@ functions:
         path: /services/{serviceId}
         method: patch
         cors: true
-
         authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -158,8 +148,6 @@ functions:
             paths:
               serviceId: true
 
-  # TODO: should be scheduled hourly
-  # for now keep on demand
   monitor:
     handler: monitor/monitor.handler
     environment:
@@ -167,9 +155,7 @@ functions:
       SES_REGION: ${self:custom.ses_region}
       SES_FROM_EMAIL: ${self:custom.ses_from_email}
     events:
-     - http:
-        path: /monitor
-        method: get
+      - schedule: rate(1 hour)
 
 
 resources:
