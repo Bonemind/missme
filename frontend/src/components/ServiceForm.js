@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, FormGroup, Col, Label, Button, Row, Card, CardTitle, CardText } from 'reactstrap';
+import { Input, FormGroup, Col, Label, Button, Row, Card, CardTitle, CardText, ListGroup, ListGroupItem } from 'reactstrap';
 import confirmDialog from 'reactstrap-confirm';
 import apiClient from '../apiClient';
 import { validIntervalUnits } from '../constants';
@@ -30,9 +30,9 @@ class PropertyDisplay extends Component {
 				<Card body>
 					<CardTitle>CURL example</CardTitle>
 					<CardText>
-						<pre>
+						<code>
 							curl -H "x-api-key: {service.ApiKey}" {this.state.basePath}/notify/{service.ServiceId}
-						</pre>
+						</code>
 					</CardText>
 				</Card>
 				<br />
@@ -55,7 +55,6 @@ class IntervalField extends Component {
 	static getDerivedStateFromProps(props, state) {
 		/* eslint-disable eqeqeq */
 		if (props.input.unit != state.prevPropsUnit || props.input.count != state.prevPropsCount) {
-			console.log('propchange');
 			return {
 				prevPropsUnit: props.input.unit,
 				prevPropsCount: props.input.count,
@@ -69,8 +68,6 @@ class IntervalField extends Component {
 	handleChange(field, value) {
 		const { onChange } = this.props;
 		this.setState({[field]: value}, () => {
-			console.log(field, value);
-			console.log(this.state);
 			onChange({unit: this.state.unit, count: this.state.count});
 		});
 	}
@@ -135,7 +132,7 @@ export default class ServiceForm extends Component {
 				await apiClient.post('/services', { body: this.state });
 			}
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 		history.push('/');
 	}
@@ -149,13 +146,11 @@ export default class ServiceForm extends Component {
 		}
 
 		try {
-			console.log(this.state.ServiceId);
-			console.log(apiClient);
 			if (this.state.ServiceId) {
 				await apiClient.del(`/services/${this.state.ServiceId}`);
 			}
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 		history.push('/');
 	}
@@ -219,6 +214,14 @@ export default class ServiceForm extends Component {
 					<Button type="submit" color="danger" onClick={() => this.delete()}>Delete</Button>
 				}&nbsp;
 				<Button type="submit" color="primary" onClick={() => this.save()}>Save</Button>
+				<br />
+				<br />
+
+				{ this.state.checkins && <h2>Recent checkins</h2> }
+
+				<ListGroup>
+					{ this.state.checkins && this.state.checkins.map(c => <ListGroupItem key={c}>{new Date(c).toLocaleString()}</ListGroupItem>) }
+				</ListGroup>
 			</Col>
 		);
 	}
