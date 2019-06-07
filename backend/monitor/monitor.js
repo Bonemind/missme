@@ -2,7 +2,7 @@
 const AWS = require('aws-sdk');
 
 const dateUtils = require('./dateUtils');
-const mailer = require('./mailer');
+const mailer = require('../helpers/mailer');
 const responses = require('../helpers/responses');
 
 const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
@@ -44,7 +44,7 @@ module.exports.handler = async (event) => {
 	});
 
 	// Send emails
-	const mailPromises = newUnhealthy.map(mailer.sendServiceEmail);
+	const mailPromises = newUnhealthy.map(mailer.sendDeadMessage);
 	await Promise.all(mailPromises);
 
 	// Update services

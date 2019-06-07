@@ -138,6 +138,8 @@ functions:
     handler: notify/get.handler
     environment:
       SERVICES_TABLE: ${self:provider.environment.SERVICES_TABLE}
+      SES_REGION: ${self:custom.ses_region}
+      SES_FROM_EMAIL: ${self:custom.ses_from_email}
     events:
      - http:
         path: /notify/{serviceId}
