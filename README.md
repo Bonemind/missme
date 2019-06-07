@@ -31,7 +31,8 @@ It will also write the `aws-exports.js` file to `frontend/src/aws-exports.js` wh
 and communicate with the api. It will also display some info about where your backend is located.
 
 Lastly, cd into the `frontend` folder and run `npm i`. When this is done, you can deploy the frontend using `amplify publish` which
-will build and upload the frontend to AWS and display a link where it can be found.
+will build and upload the frontend to AWS and display a link where it can be found. Before you can deploy the frontend you need to add
+hosting using the `amplify hosting add` command.
 
 ## Usage:
 
