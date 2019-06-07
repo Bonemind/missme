@@ -19,7 +19,6 @@ plugins:
   - serverless-plugin-optimize
 
 custom:
-  services_table: ${ssm:/${self:service.name}/${self:provider.stage}/service_table_name}
   ses_region: ${file(./ses_config.yml):ses_region}
   ses_from_email: ${file(./ses_config.yml):ses_from_email}
   ses_arn: ${file(./ses_config.yml):ses_arn}
@@ -36,6 +35,8 @@ provider:
   name: aws
   runtime: nodejs10.x
   region: eu-central-1
+  environment:
+    SERVICES_TABLE: 'services'
   iamRoleStatements:
   - Effect: Allow
     Action:
@@ -45,7 +46,7 @@ provider:
       - dynamodb:PutItem
       - dynamodb:UpdateItem
       - dynamodb:DeleteItem
-    Resource: "arn:aws:dynamodb:${self:provider.region}:#{AWS::AccountId}:table/${self:custom.services_table}"
+    Resource: "arn:aws:dynamodb:${self:provider.region}:#{AWS::AccountId}:table/${self:provider.environment.SERVICES_TABLE}"
   - Effect: 'Allow'
     Action:
       - "ses:SendEmail"
@@ -57,7 +58,7 @@ functions:
   create-service:
     handler: services/create.handler
     environment:
-      SERVICES_TABLE: ${self:custom.services_table}
+      SERVICES_TABLE: ${self:provider.environment.SERVICES_TABLE}
     events:
      - http:
         path: /services
@@ -71,7 +72,7 @@ functions:
   update-service:
     handler: services/update.handler
     environment:
-      SERVICES_TABLE: ${self:custom.services_table}
+      SERVICES_TABLE: ${self:provider.environment.SERVICES_TABLE}
     events:
      - http:
         path: /services/{serviceId}
@@ -102,7 +103,7 @@ functions:
   delete-service:
     handler: services/delete.handler
     environment:
-      SERVICES_TABLE: ${self:custom.services_table}
+      SERVICES_TABLE: ${self:provider.environment.SERVICES_TABLE}
     events:
      - http:
         path: /services/{serviceId}
@@ -120,7 +121,7 @@ functions:
   get-service:
     handler: services/list.handler
     environment:
-      SERVICES_TABLE: ${self:custom.services_table}
+      SERVICES_TABLE: ${self:provider.environment.SERVICES_TABLE}
     events:
      - http:
         path: /services/{serviceId}
@@ -146,7 +147,7 @@ functions:
   get-notify:
     handler: notify/get.handler
     environment:
-      SERVICES_TABLE: ${self:custom.services_table}
+      SERVICES_TABLE: ${self:provider.environment.SERVICES_TABLE}
     events:
      - http:
         path: /notify/{serviceId}
@@ -162,7 +163,7 @@ functions:
   monitor:
     handler: monitor/monitor.handler
     environment:
-      SERVICES_TABLE: ${self:custom.services_table}
+      SERVICES_TABLE: ${self:provider.environment.SERVICES_TABLE}
       SES_REGION: ${self:custom.ses_region}
       SES_FROM_EMAIL: ${self:custom.ses_from_email}
     events:
@@ -206,4 +207,28 @@ resources:
         Type: COGNITO_USER_POOLS
         ProviderARNs:
           - Fn::GetAtt: [UserPool, Arn]
+
+    # ---
+    # DB
+    # ---
+    ServicesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.SERVICES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: ServiceId
+            AttributeType: S
+          - AttributeName: UserId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: ServiceId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+        - IndexName: user_gsi
+          KeySchema:
+          - AttributeName: UserId
+            KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
 

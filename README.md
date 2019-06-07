@@ -19,16 +19,14 @@ Requirements:
 
 - [Severless](https://serverless.com/)
 - [Amplify](https://aws-amplify.github.io/)
-- [Terraform](https://www.terraform.io/)
 - [AWS Cli](https://aws.amazon.com/cli/)
 
 Once you have the prerequisite tooling installed, configure your AWS credentials using the AWS cli.
-The next step is to run Terraform which will provision the required db tables.
 
 For backend deployment you'll need to copy `ses_config.example.yml` to `ses_config.yml` and fill in the
 yaml with your own values. After that run `npm i` in the `backend` folder, followed by `sls deploy`.
 
-This will create an api gateway, configure the lambda functions, and provision a cognito user pool for authentication.
+This will create an api gateway, dynamodb table, configure the lambda functions, and provision a cognito user pool for authentication.
 It will also write the `aws-exports.js` file to `frontend/src/aws-exports.js` which is needed by the frontend to authenticate
 and communicate with the api. It will also display some info about where your backend is located.
 
